@@ -44,12 +44,18 @@ To run this project locally, follow these steps:
    cd 3-d-portfolio
 Install dependencies:
 
+bash
 Copy
+Edit
 npm install
-Start the development server: 
+Start the development server:
+
+bash
 Copy
+Edit
 npm run dev
 The application will be accessible at http://localhost:3000.
+
 Contributing
 Contributions are warmly welcomed! Whether you have suggestions, bug reports, or want to add new features, please don't hesitate to open an issue or create a pull request.
 
@@ -59,8 +65,16 @@ This project is licensed under the MIT License. See the LICENSE file for details
 Contact
 [Provide your contact information here. For example:]
 
-Email: toufiques236@gmail.com
-LinkedIn: www.linkedin.com/in/md-toufique-sheikh-a01063295
-
+Email: your.email@example.com
+LinkedIn: Your LinkedIn Profile
+Portfolio: Your Personal Portfolio Website
 Thank you for visiting my portfolio!
+
+ruby
+Copy
+Edit
+
+**Note:** Ensure that you replace the placeholder links and content with your actual information. This template provides a structured and informative `README.md` that highlights the key aspects of your 3D portfolio project.
+::contentReference[oaicite:0]{index=0}
+ 
 
