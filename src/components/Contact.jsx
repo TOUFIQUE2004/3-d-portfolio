@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
@@ -9,7 +9,7 @@ const ContactContainer = styled.section`
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background: url("/parallex.jpg") center/cover fixed no-repeat;
+    background: url("/parallex.jpg.jpg") center/cover fixed no-repeat;
     padding: 20px;
     position: relative;
     color: white;
@@ -18,18 +18,14 @@ const ContactContainer = styled.section`
 const ContentWrapper = styled.div`
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 80%;
+    justify-content: space-around;
+    width: 90%;
     max-width: 1200px;
 `;
 
-const MarsContainer = styled.div`
-    width: 50%;
-    height: 400px;
-
-    @media (max-width: 768px) {
-        display: none;
-    }
+const MarsWrapper = styled.div`
+    width: 600px; /* Increased size */
+    height: 600px;
 `;
 
 const FormWrapper = styled.div`
@@ -58,10 +54,6 @@ const Input = styled.input`
     background: rgba(255, 255, 255, 0.2);
     color: white;
     outline: none;
-
-    &:focus {
-        border: 2px solid #ff4081;
-    }
 `;
 
 const Textarea = styled.textarea`
@@ -76,10 +68,6 @@ const Textarea = styled.textarea`
     outline: none;
     resize: none;
     height: 120px;
-
-    &:focus {
-        border: 2px solid #ff4081;
-    }
 `;
 
 const Button = styled.button`
@@ -99,37 +87,53 @@ const Button = styled.button`
     }
 `;
 
-// ✅ Mars Component Inside Contact.jsx
-const Mars = () => {
+// 🌍 Mars 3D Model Component (Bounding Box Fixed)
+const Mars = ({ scale }) => {
     const marsRef = useRef();
-    const { scene } = useGLTF("/mars (2).glb"); // Ensure mars.glb is in public folder
+    const { scene } = useGLTF("/mars (2).glb");
 
-    // 🔄 Rotation & Floating Animation
-    useFrame(() => {
-        if (marsRef.current) {
-            marsRef.current.rotation.y += 0.003; // Slow rotation
-            marsRef.current.position.y = Math.sin(Date.now() * 0.001) * 0.2; // Floating effect
+    // Ensure the model has no bounding box
+    scene.traverse((child) => {
+        if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+            child.material.transparent = true;
         }
     });
 
-    return <primitive ref={marsRef} object={scene} scale={2} position={[-3, 0, 0]} />;
+    // Rotation animation
+    useFrame(() => {
+        if (marsRef.current) {
+            marsRef.current.rotation.y += 0.002;
+        }
+    });
+
+    return <primitive ref={marsRef} object={scene} scale={scale} />;
 };
 
+// 📌 Contact Component
 const Contact = () => {
+    const [zoom, setZoom] = useState(2.5);
+
     return (
         <ContactContainer>
             <ContentWrapper>
-                {/* 🚀 Mars 3D Model on Left */}
-                <MarsContainer>
-                    <Canvas camera={{ position: [0, 0, 5] }}>
-                        <ambientLight intensity={0.5} />
-                        <directionalLight position={[2, 2, 5]} />
-                        <Mars />
-                        <OrbitControls enableZoom={false} />
+                {/* Mars 3D Model */}
+                <MarsWrapper>
+                    <Canvas camera={{ position: [0, 0, zoom] }}>
+                        <ambientLight intensity={1.5} />
+                        <directionalLight position={[3, 2, 1]} />
+                        <Mars scale={1.5} /> {/* Increased Mars Size */}
+                        <OrbitControls
+                            enableZoom
+                            minDistance={2}
+                            maxDistance={7}
+                            zoomSpeed={0.5}
+                        />
                     </Canvas>
-                </MarsContainer>
+                </MarsWrapper>
 
-                {/* 📩 Contact Form */}
+                {/* Contact Form */}
                 <FormWrapper>
                     <Title>📩 Contact Me</Title>
                     <Input type="text" placeholder="Your Name" />
