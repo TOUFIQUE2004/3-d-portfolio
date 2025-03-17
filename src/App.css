@@ -6,41 +6,70 @@ html, body {
     width: 100vw;
 }
 
-/* ✅ Fix Container Width */
-#skills-section {
-    width: 100vw;
-    max-width: 100%;
-    overflow: hidden;
+/* ✅ Navbar - Adjust for Mobile */
+nav {
     display: flex;
-    flex-wrap: wrap; /* Ensures proper wrapping */
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    flex-wrap: wrap;
 }
 
-/* ✅ Fix Three.js Canvas Overflow */
-canvas {
-    display: block;
-    max-width: 100%;
-    height: auto;
-    overflow: hidden;
+/* ✅ Navbar Links */
+.nav-links {
+    display: flex;
+    gap: 20px;
 }
 
-/* ✅ Fix Flexbox Issues */
-#skills-section > div {
-    flex: 1 1 50%; /* Ensures it doesn't exceed 100% width */
-    min-width: 300px; /* Prevents squishing on smaller screens */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none; /* Hide menu, show hamburger */
+    }
+
+    .menu-icon {
+        display: block;
+    }
 }
-html, body {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    background: black;
+
+/* ✅ Contact Section */
+.ContactContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 20px;
     color: white;
+    text-align: center;
 }
 
-.saturn-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
+/* ✅ Responsive 3D Mars */
+.MarsCanvas {
+    width: 400px;
+    height: 400px;
+}
+
+@media (max-width: 768px) {
+    .MarsCanvas {
+        width: 250px;
+        height: 250px;
+    }
+}
+
+/* ✅ Skills Section Fix */
+#skills-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.skills-container {
+    max-width: 100%;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .skills-container {
+        font-size: 14px;
+    }
 }

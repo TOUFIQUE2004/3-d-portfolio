@@ -116,7 +116,7 @@ const Contact = () => {
     const [zoom, setZoom] = useState(2.5);
 
     return (
-        <ContactContainer>
+        <ContactContainer className={"Contact"}>
             <ContentWrapper>
                 {/* Mars 3D Model */}
                 <MarsWrapper>
