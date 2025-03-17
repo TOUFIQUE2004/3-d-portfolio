@@ -1,0 +1,11 @@
+Model Information:
+* title:	arnold&son watch mechanical
+* source:	https://sketchfab.com/3d-models/arnoldson-watch-mechanical-4dc8d4dd90cb4b4e9752bcf988f357cf
+* author:	abdelghani.0 (https://sketchfab.com/abdelghani.0)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "arnold&son watch mechanical" (https://sketchfab.com/3d-models/arnoldson-watch-mechanical-4dc8d4dd90cb4b4e9752bcf988f357cf) by abdelghani.0 (https://sketchfab.com/abdelghani.0) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

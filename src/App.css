@@ -1,0 +1,46 @@
+/* ✅ Ensure No Horizontal Overflow */
+html, body {
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+}
+
+/* ✅ Fix Container Width */
+#skills-section {
+    width: 100vw;
+    max-width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap; /* Ensures proper wrapping */
+}
+
+/* ✅ Fix Three.js Canvas Overflow */
+canvas {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    overflow: hidden;
+}
+
+/* ✅ Fix Flexbox Issues */
+#skills-section > div {
+    flex: 1 1 50%; /* Ensures it doesn't exceed 100% width */
+    min-width: 300px; /* Prevents squishing on smaller screens */
+}
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: black;
+    color: white;
+}
+
+.saturn-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
