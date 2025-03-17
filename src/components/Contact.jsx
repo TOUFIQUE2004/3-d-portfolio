@@ -1,18 +1,35 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
-import {color} from "framer-motion";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls, useGLTF } from "@react-three/drei";
 
 // 🌌 Styled Components
 const ContactContainer = styled.section`
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background: url("/parallex.jpg.jpg") center/cover fixed no-repeat;
+    background: url("/parallex.jpg") center/cover fixed no-repeat;
     padding: 20px;
     position: relative;
     color: white;
+`;
+
+const ContentWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+    max-width: 1200px;
+`;
+
+const MarsContainer = styled.div`
+    width: 50%;
+    height: 400px;
+
+    @media (max-width: 768px) {
+        display: none;
+    }
 `;
 
 const FormWrapper = styled.div`
@@ -38,13 +55,12 @@ const Input = styled.input`
     border: none;
     border-radius: 8px;
     font-size: 1rem;
-    background: rgb(22, 1, 209);
-    color: #092cd9;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
     outline: none;
 
     &:focus {
         border: 2px solid #ff4081;
-
     }
 `;
 
@@ -56,7 +72,7 @@ const Textarea = styled.textarea`
     border-radius: 8px;
     font-size: 1rem;
     background: rgba(255, 255, 255, 0.2);
-    color: #1601d1;
+    color: white;
     outline: none;
     resize: none;
     height: 120px;
@@ -74,7 +90,7 @@ const Button = styled.button`
     border-radius: 8px;
     font-size: 1rem;
     background: #ff4081;
-    color: #1601d1;
+    color: white;
     cursor: pointer;
     transition: 0.3s ease;
 
@@ -83,16 +99,45 @@ const Button = styled.button`
     }
 `;
 
+// ✅ Mars Component Inside Contact.jsx
+const Mars = () => {
+    const marsRef = useRef();
+    const { scene } = useGLTF("/mars (2).glb"); // Ensure mars.glb is in public folder
+
+    // 🔄 Rotation & Floating Animation
+    useFrame(() => {
+        if (marsRef.current) {
+            marsRef.current.rotation.y += 0.003; // Slow rotation
+            marsRef.current.position.y = Math.sin(Date.now() * 0.001) * 0.2; // Floating effect
+        }
+    });
+
+    return <primitive ref={marsRef} object={scene} scale={2} position={[-3, 0, 0]} />;
+};
+
 const Contact = () => {
     return (
-        <ContactContainer className={"Contact"}>
-            <FormWrapper>
-                <Title>📩 Contact Me</Title>
-                <Input type="text" placeholder="Your Name"  style={{color: "white"}}/>
-                <Input type="email" placeholder="Your Email"  style={{color: "white"}} />
-                <Textarea placeholder="Your Message"   style={{color: "white"}}/>
-                <Button>Send</Button>
-            </FormWrapper>
+        <ContactContainer>
+            <ContentWrapper>
+                {/* 🚀 Mars 3D Model on Left */}
+                <MarsContainer>
+                    <Canvas camera={{ position: [0, 0, 5] }}>
+                        <ambientLight intensity={0.5} />
+                        <directionalLight position={[2, 2, 5]} />
+                        <Mars />
+                        <OrbitControls enableZoom={false} />
+                    </Canvas>
+                </MarsContainer>
+
+                {/* 📩 Contact Form */}
+                <FormWrapper>
+                    <Title>📩 Contact Me</Title>
+                    <Input type="text" placeholder="Your Name" />
+                    <Input type="email" placeholder="Your Email" />
+                    <Textarea placeholder="Your Message" />
+                    <Button>Send</Button>
+                </FormWrapper>
+            </ContentWrapper>
         </ContactContainer>
     );
 };

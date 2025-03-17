@@ -1,7 +1,7 @@
 import React, { useRef, Suspense } from "react";
 import styled, { keyframes } from "styled-components";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, useGLTF, Stars, Html } from "@react-three/drei";
+import { OrbitControls, useGLTF, Stars } from "@react-three/drei";
 import * as THREE from "three";
 
 // 🌟 Sunlight Glow Effect on Text
@@ -96,7 +96,7 @@ const GlobeContainer = styled.div`
 
 // 🎨 3D Earth Component
 const Earth = () => {
-    const { scene } = useGLTF("/earth.glb");
+    const { scene } = useGLTF("/earth (1).glb");
     const meshRef = useRef();
 
     // ✅ Apply Texture
@@ -146,31 +146,13 @@ const getLatLonPosition = (lat, lon, radius = 3.1) => {
     );
 };
 
-// 📍 Pinpoint for Serampore, West Bengal
+// 📍 Pinpoint for Serampore, West Bengal (Using pin.glb)
 const Pinpoint = () => {
-    const position = getLatLonPosition(22.7528, 88.3400);
+    const { scene } = useGLTF("/pin.glb"); // ✅ Load pin model
+    const position = getLatLonPosition(22.7528, 88.3400); // Serampore, WB
 
     return (
-        <>
-            {/* Red Sphere Pinpoint */}
-            <mesh position={position}>
-                <sphereGeometry args={[0.05, 16, 16]} />
-                <meshStandardMaterial color="red" />
-            </mesh>
-
-            {/* 📍 Label */}
-            <Html position={position} center>
-                <div style={{
-                    color: "white",
-                    background: "black",
-                    padding: "5px",
-                    borderRadius: "5px",
-                    fontSize: "12px"
-                }}>
-                    Serampore, WB
-                </div>
-            </Html>
-        </>
+        <primitive object={scene} position={position} scale={0.3} />
     );
 };
 
@@ -179,7 +161,7 @@ const About = () => {
     return (
         <>
             {/* 🌟 Full Page Stars Background */}
-            <StarsBackground>
+            <StarsBackground className={"About"}>
                 <Canvas style={{ width: "100%", height: "100%" }}>
                     <Stars radius={300} depth={100} count={10000} factor={5} fade />
                 </Canvas>

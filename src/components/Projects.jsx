@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { Canvas } from "@react-three/fiber";
+import { Stars } from "@react-three/drei";
 
 // ✅ Styled Components for UI
 const ProjectsContainer = styled(motion.div)`
@@ -12,8 +14,22 @@ const ProjectsContainer = styled(motion.div)`
     color: white;
     min-height: 100vh;
     overflow: hidden;
+    position: relative; /* Ensures layering over stars */
 `;
 
+// 🌟 Starry Background Container
+const StarsBackground = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: black;
+    z-index: -1; /* Places it behind content */
+    overflow: hidden;
+`;
+
+// 📦 Projects Grid
 const ProjectsGrid = styled(motion.div)`
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -22,6 +38,7 @@ const ProjectsGrid = styled(motion.div)`
     margin-top: 2rem;
 `;
 
+// 🎴 Project Cards
 const ProjectCard = styled(motion.a)`
     background: linear-gradient(145deg, #1e1e1e, #292929);
     padding: 1.5rem;
@@ -84,53 +101,62 @@ const Projects = () => {
     }, []);
 
     return (
-        <ProjectsContainer id="Projects" style={{ y }}>
-            <motion.h2
-                style={{ fontSize: "2.5rem" }}
-                initial={{ opacity: 0, y: -50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1 }}
-            >
-                My GitHub Projects
-            </motion.h2>
-            {error ? <ErrorText>{error}</ErrorText> : null}
-            <ProjectsGrid>
-                {repos.map((repo, index) => (
-                    <ProjectCard
-                        key={repo.id}
-                        href={repo.html_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: index * 0.1 }}
+        <>
+            {/* 🌟 Starry Background */}
+            <StarsBackground>
+                <Canvas style={{ width: "100%", height: "100%" }}>
+                    <Stars radius={300} depth={100} count={8000} factor={5} fade speed={1} />
+                </Canvas>
+            </StarsBackground>
 
-                        whileHover={{
-                            scale: [1, 1.05, 1],
-                            rotate: ["0deg", "2deg", "-2deg", "0deg"],
-                            transition: {
-                                duration: 0.5,
-                                ease: "easeInOut",
-                                type: "spring",
-                                stiffness: 500,
-                                damping: 10
-                            }
-                        }}
+            <ProjectsContainer id="Projects" style={{ y }}>
+                <motion.h2
+                    style={{ fontSize: "2.5rem" }}
+                    initial={{ opacity: 0, y: -50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1 }}
+                >
+                    My GitHub Projects
+                </motion.h2>
+                {error ? <ErrorText>{error}</ErrorText> : null}
+                <ProjectsGrid>
+                    {repos.map((repo, index) => (
+                        <ProjectCard
+                            key={repo.id}
+                            href={repo.html_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            initial={{ opacity: 0, y: 50 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: index * 0.1 }}
 
-                        whileTap={{
-                            scale: 0.95,
-                            transition: { duration: 0.2 }
-                        }}
-                    >
-                        <ProjectTitle>{repo.name}</ProjectTitle>
-                        <ProjectDescription>
-                            {repo.description ? repo.description : "No description available."}
-                        </ProjectDescription>
-                        {repo.language && <ProjectLanguage>{repo.language}</ProjectLanguage>}
-                    </ProjectCard>
-                ))}
-            </ProjectsGrid>
-        </ProjectsContainer>
+                            whileHover={{
+                                scale: [1, 1.05, 1],
+                                rotate: ["0deg", "2deg", "-2deg", "0deg"],
+                                transition: {
+                                    duration: 0.5,
+                                    ease: "easeInOut",
+                                    type: "spring",
+                                    stiffness: 500,
+                                    damping: 10
+                                }
+                            }}
+
+                            whileTap={{
+                                scale: 0.95,
+                                transition: { duration: 0.2 }
+                            }}
+                        >
+                            <ProjectTitle>{repo.name}</ProjectTitle>
+                            <ProjectDescription>
+                                {repo.description ? repo.description : "No description available."}
+                            </ProjectDescription>
+                            {repo.language && <ProjectLanguage>{repo.language}</ProjectLanguage>}
+                        </ProjectCard>
+                    ))}
+                </ProjectsGrid>
+            </ProjectsContainer>
+        </>
     );
 };
 
