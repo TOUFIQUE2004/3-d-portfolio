@@ -1,7 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
+import emailjs from "@emailjs/browser";
 
 // 🌌 Styled Components
 const ContactContainer = styled.section`
@@ -21,14 +22,15 @@ const ContentWrapper = styled.div`
     justify-content: space-around;
     width: 90%;
     max-width: 1200px;
+    flex-wrap: wrap;
 `;
 
 const MarsWrapper = styled.div`
-    width: 600px; /* Increased size */
-    height: 600px;
+    width: 400px;
+    height: 400px;
 `;
 
-const FormWrapper = styled.div`
+const FormWrapper = styled.form`
     backdrop-filter: blur(10px);
     background: rgba(255, 255, 255, 0.1);
     padding: 30px;
@@ -51,7 +53,7 @@ const Input = styled.input`
     border: none;
     border-radius: 8px;
     font-size: 1rem;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgb(175, 112, 79);
     color: white;
     outline: none;
 `;
@@ -87,21 +89,11 @@ const Button = styled.button`
     }
 `;
 
-// 🌍 Mars 3D Model Component (Bounding Box Fixed)
+// 🌍 Mars 3D Model
 const Mars = ({ scale }) => {
     const marsRef = useRef();
     const { scene } = useGLTF("/mars (2).glb");
 
-    // Ensure the model has no bounding box
-    scene.traverse((child) => {
-        if (child.isMesh) {
-            child.castShadow = true;
-            child.receiveShadow = true;
-            child.material.transparent = true;
-        }
-    });
-
-    // Rotation animation
     useFrame(() => {
         if (marsRef.current) {
             marsRef.current.rotation.y += 0.002;
@@ -111,35 +103,51 @@ const Mars = ({ scale }) => {
     return <primitive ref={marsRef} object={scene} scale={scale} />;
 };
 
-// 📌 Contact Component
+// 📩 Contact Component
 const Contact = () => {
-    const [zoom, setZoom] = useState(2.5);
+    const formRef = useRef();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        emailjs
+            .sendForm(
+                "service_agmiqnn",
+                "template_9hxwm7n",
+                formRef.current,
+                "j1mSOoNK3s9xG2x4y"
+            )
+            .then(
+                (result) => {
+                    alert("Message sent successfully!");
+                    formRef.current.reset();
+                },
+                (error) => {
+                    console.error(error.text);
+                    alert("Something went wrong. Please try again.");
+                }
+            );
+    };
 
     return (
-        <ContactContainer className={"Contact"}>
+        <ContactContainer>
             <ContentWrapper>
-                {/* Mars 3D Model */}
                 <MarsWrapper>
-                    <Canvas camera={{ position: [0, 0, zoom] }}>
+                    <Canvas camera={{ position: [0, 0, 2.5] }}>
                         <ambientLight intensity={1.5} />
                         <directionalLight position={[3, 2, 1]} />
-                        <Mars scale={1.5} /> {/* Increased Mars Size */}
-                        <OrbitControls
-                            enableZoom
-                            minDistance={2}
-                            maxDistance={7}
-                            zoomSpeed={0.5}
-                        />
+                        <Mars scale={1.5} />
+                        <OrbitControls enableZoom minDistance={2} maxDistance={7} />
                     </Canvas>
                 </MarsWrapper>
 
-                {/* Contact Form */}
-                <FormWrapper>
+                <FormWrapper ref={formRef} onSubmit={handleSubmit}>
                     <Title>📩 Contact Me</Title>
-                    <Input type="text" placeholder="Your Name" />
-                    <Input type="email" placeholder="Your Email" />
-                    <Textarea placeholder="Your Message" />
-                    <Button>Send</Button>
+                    <Input type="text" name="name" placeholder="Your Name" required />
+                    <Input type="email" name="email" placeholder="Your Email" required />
+                    <Input type="text" name="title" placeholder="Subject" required />
+                    <Textarea name="message" placeholder="Your Message" required />
+                    <Button type="submit">Send</Button>
                 </FormWrapper>
             </ContentWrapper>
         </ContactContainer>
