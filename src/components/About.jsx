@@ -4,14 +4,14 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Stars } from "@react-three/drei";
 import * as THREE from "three";
 
-// 🌟 Sunlight Glow Effect on Text
+
 const glowEffect = keyframes`
   0% { text-shadow: 0 0 10px rgba(255,255,150,0.3); }
   50% { text-shadow: 0 0 30px rgba(255,255,150,0.7); }
   100% { text-shadow: 0 0 10px rgba(255,255,150,0.3); }
 `;
 
-// 🌟 Full Page Background with Stars
+/ 🌟 Full Page Background with Stars/
 const StarsBackground = styled.div`
   position: fixed;
   top: 0;
@@ -172,7 +172,7 @@ const About = () => {
                 <AboutText>
                     <Title>About Me</Title>
                     <Paragraph>
-                        I am Md Toufique Sheikh, currently a second-year Information Technology student
+                        I am Md Toufique Sheikh, currently a third-year Information Technology student
                         at the Government College of Engineering and Textile Technology, Serampore (GCETTS).
                         I have completed courses in both basic and advanced Python and am currently interning at Kryptora.
                     </Paragraph>
