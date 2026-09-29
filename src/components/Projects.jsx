@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Canvas } from "@react-three/fiber";
 import { Stars } from "@react-three/drei";
 
@@ -9,8 +9,8 @@ const ProjectsContainer = styled(motion.div)`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 4rem 2rem;
-    background-color: #0a0a0a;
+    padding: 7rem clamp(1.25rem, 6vw, 6rem);
+    background: linear-gradient(180deg, rgba(10, 10, 10, 0.92), #070812);
     color: white;
     min-height: 100vh;
     overflow: hidden;
@@ -32,63 +32,110 @@ const StarsBackground = styled.div`
 // 📦 Projects Grid
 const ProjectsGrid = styled(motion.div)`
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    width: 80%;
-    margin-top: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
+    gap: 1rem;
+    width: min(100%, 1200px);
+    margin-top: 2.5rem;
 `;
 
 // 🎴 Project Cards
 const ProjectCard = styled(motion.a)`
-    background: linear-gradient(145deg, #1e1e1e, #292929);
+    display: flex;
+    flex-direction: column;
+    min-height: 250px;
     padding: 1.5rem;
-    border-radius: 15px;  /* Cube-like rounded effect */
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.045);
     text-decoration: none;
     color: white;
-    perspective: 1000px;  /* Enables 3D perspective */
-    transform-style: preserve-3d;
-    box-shadow: 4px 4px 15px rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease-in-out;
+    transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
 
     &:hover {
-        box-shadow: 6px 6px 20px rgba(255, 255, 255, 0.3);
+        border-color: rgba(255, 204, 102, 0.65);
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-4px);
     }
 `;
 
 const ProjectTitle = styled.h3`
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    margin: 0 0 0.75rem;
+    color: #fff;
+    font-size: 1.25rem;
 `;
 
 const ProjectDescription = styled.p`
-    font-size: 1rem;
-    color: #bbb;
+    flex: 1;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 0.94rem;
+    line-height: 1.6;
+`;
+
+const ProjectMeta = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.85rem;
+    margin-top: 1.5rem;
+    color: rgba(255, 255, 255, 0.52);
+    font-size: 0.76rem;
 `;
 
 const ProjectLanguage = styled.span`
-    display: inline-block;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 0.4rem 1rem;
-    border-radius: 5px;
-    margin-top: 10px;
-    font-size: 0.9rem;
-    font-weight: bold;
+    color: #ffcc66;
+    font-weight: 700;
 `;
 
-const ErrorText = styled.p`
-    color: red;
-    font-size: 1.2rem;
+const SectionHeader = styled.div`
+    width: min(100%, 1200px);
+`;
+
+const Eyebrow = styled.div`
+    margin-bottom: 0.75rem;
+    color: #ffcc66;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+`;
+
+const SectionTitle = styled.h2`
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+`;
+
+const SectionIntro = styled.p`
+    max-width: 600px;
+    margin: 1rem 0 0;
+    color: rgba(255, 255, 255, 0.66);
+    line-height: 1.6;
+`;
+
+const StatusText = styled.p`
+    width: min(100%, 1200px);
+    margin: 2.5rem 0 0;
+    color: rgba(255, 255, 255, 0.62);
+`;
+
+const GithubLink = styled.a`
+    display: inline-block;
     margin-top: 2rem;
+    color: #ffcc66;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+
+    &:hover {
+        color: #fff;
+    }
 `;
 
 // ✅ Main Projects Component with Parallax & Jelly Effect
 const Projects = () => {
     const [repos, setRepos] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState("");
-
-    // Scroll-based Parallax Effect
-    const { scrollYProgress } = useScroll();
-    const y = useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]);
 
     useEffect(() => {
         fetch("https://api.github.com/users/TOUFIQUE2004/repos")
@@ -96,8 +143,17 @@ const Projects = () => {
                 if (!res.ok) throw new Error("Failed to fetch projects");
                 return res.json();
             })
-            .then((data) => setRepos(data))
-            .catch((err) => setError(err.message));
+            .then((data) => {
+                const sortedRepos = data
+                    .filter((repo) => !repo.fork)
+                    .sort((firstRepo, secondRepo) => {
+                        const score = (repo) => repo.stargazers_count * 10 + repo.forks_count;
+                        return score(secondRepo) - score(firstRepo) || new Date(secondRepo.updated_at) - new Date(firstRepo.updated_at);
+                    });
+                setRepos(sortedRepos);
+            })
+            .catch((err) => setError(err.message))
+            .finally(() => setIsLoading(false));
     }, []);
 
     return (
@@ -109,17 +165,23 @@ const Projects = () => {
                 </Canvas>
             </StarsBackground>
 
-            <ProjectsContainer id="Projects" style={{ y }}>
-                <motion.h2
-                    style={{ fontSize: "2.5rem" }}
+            <ProjectsContainer id="Projects">
+                <SectionHeader
                     initial={{ opacity: 0, y: -50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1 }}
                 >
-                    My GitHub Projects
-                </motion.h2>
-                {error ? <ErrorText>{error}</ErrorText> : null}
-                <ProjectsGrid>
+                    <Eyebrow>Selected work from GitHub</Eyebrow>
+                    <SectionTitle>Projects with a pulse</SectionTitle>
+                    <SectionIntro>Explore the repositories I am actively building, refining, and sharing in public.</SectionIntro>
+                    <GithubLink href="https://github.com/TOUFIQUE2004?tab=repositories" target="_blank" rel="noopener noreferrer">
+                        View all repositories -&gt;
+                    </GithubLink>
+                </SectionHeader>
+                {isLoading && <StatusText>Loading the latest repositories...</StatusText>}
+                {error && <StatusText>GitHub projects are temporarily unavailable. Please visit my profile to browse them.</StatusText>}
+                {!isLoading && !error && repos.length === 0 && <StatusText>No public repositories found yet.</StatusText>}
+                {!isLoading && !error && repos.length > 0 && <ProjectsGrid>
                     {repos.map((repo, index) => (
                         <ProjectCard
                             key={repo.id}
@@ -130,31 +192,21 @@ const Projects = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: index * 0.1 }}
 
-                            whileHover={{
-                                scale: [1, 1.05, 1],
-                                rotate: ["0deg", "2deg", "-2deg", "0deg"],
-                                transition: {
-                                    duration: 0.5,
-                                    ease: "easeInOut",
-                                    type: "spring",
-                                    stiffness: 500,
-                                    damping: 10
-                                }
-                            }}
-
-                            whileTap={{
-                                scale: 0.95,
-                                transition: { duration: 0.2 }
-                            }}
+                            whileTap={{ scale: 0.98 }}
                         >
                             <ProjectTitle>{repo.name}</ProjectTitle>
                             <ProjectDescription>
                                 {repo.description ? repo.description : "No description available."}
                             </ProjectDescription>
-                            {repo.language && <ProjectLanguage>{repo.language}</ProjectLanguage>}
+                            <ProjectMeta>
+                                {repo.language && <ProjectLanguage>{repo.language}</ProjectLanguage>}
+                                <span>{repo.stargazers_count} stars</span>
+                                <span>{repo.forks_count} forks</span>
+                                <span>Updated {new Date(repo.updated_at).toLocaleDateString()}</span>
+                            </ProjectMeta>
                         </ProjectCard>
                     ))}
-                </ProjectsGrid>
+                </ProjectsGrid>}
             </ProjectsContainer>
         </>
     );
