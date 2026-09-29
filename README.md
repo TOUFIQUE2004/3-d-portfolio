@@ -1,73 +1,92 @@
-Toufique's 3D Portfolio
-Welcome to my interactive 3D portfolio—a digital playground where creativity meets cutting-edge technology! This isn’t just a website; it’s an immersive experience designed to showcase my work as a 3D artist and web developer in a way that’s dynamic, engaging, and unforgettable.
+# Toufique's 3D Portfolio
 
-Table of Contents
-About Me
-What Makes This Special
-Tech Stack
-Get It Running
-Join the Journey
-License
-Let’s Connect
-About Me
-I’m Toufique, a 3D artist and web developer with a passion for crafting virtual worlds that captivate and inspire. This portfolio is more than a collection of projects—it’s a window into my creative process, blending the artistry of 3D design with the precision of modern web development. Whether I’m sculpting interactive models or coding seamless user experiences, I’m driven by a mission to push boundaries and bring ideas to life.
+An interactive portfolio for Toufique Sheikh, combining 3D visuals, motion design, and modern web development. The site presents my skills, coding activity, selected projects, and contact details in one responsive experience.
 
-What Makes This Special
-3D Immersion: Dive into my projects with interactive 3D models that you can rotate, zoom, and explore from every angle.
-Device-Friendly Magic: Built with responsiveness in mind, this portfolio shines on desktops, tablets, and phones alike.
-Live Updates: Dynamic content loading keeps things fresh and scalable—no stale projects here!
-Mood Switching: Toggle between sleek dark mode and crisp light mode to match your vibe.
-Tech Stack
-This project is powered by a blend of innovative tools and frameworks:
+## Highlights
 
-Three.js: The engine behind the 3D wizardry, bringing depth to your browser.
-React.js: Fast, component-driven UI for a smooth and modern feel.
-React Three Fiber: Marrying React with Three.js for declarative 3D awesomeness.
-Tailwind CSS: Stylish, utility-first design that’s as efficient as it is beautiful.
-Framer Motion: Silky-smooth animations that make every interaction pop.
-Get It Running
-Want to explore the code or run it locally? Here’s how to get started:
+- Interactive 3D scenes powered by React Three Fiber and Three.js
+- Animated page sections and project cards with Framer Motion
+- Responsive layouts for desktop, tablet, and mobile screens
+- Live GitHub profile statistics and repository data
+- LeetCode activity displayed alongside GitHub metrics
+- Contact form integration through EmailJS
+- Local 3D assets for the jellyfish and Saturn experiences
 
-Clone the repo:
-bash
+## Built With
 
-Collapse
+- React 18
+- Vite
+- Three.js
+- React Three Fiber and Drei
+- Framer Motion
+- styled-components
+- React Hook Form
+- EmailJS
 
-Wrap
+## Getting Started
 
-Copy
+### Prerequisites
+
+- Node.js 18 or newer
+- npm
+
+### Installation
+
+```bash
 git clone https://github.com/TOUFIQUE2004/3-d-portfolio.git
 cd 3-d-portfolio
-Install dependencies:
-
-Collapse
-
-Copy
 npm install
-Fire it up:
+```
 
+### Run locally
 
-Collapse
-
-
-
-Copy
+```bash
 npm run dev
-Open your browser to http://localhost:3000 and step into my world!
-Join the Journey
-I’d love for you to be part of this project! Got ideas, spotted a bug, or want to add a feature? Jump in by:
+```
 
-Opening an issue to share your thoughts.
-Submitting a pull request with your magic touch.
-Every contribution helps this portfolio evolve, and I’m excited to see where we can take it together!
+Vite will print the local URL in the terminal, usually [`http://localhost:5173`](http://localhost:5173).
 
-License
-This project is open-source under the MIT License. Feel free to use, adapt, and share—just give a nod to the original!
+## Available Scripts
 
-Let’s Connect
-I’m always up for a chat about 3D art, web dev, or anything creative. Reach out:
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm run preview` | Preview the production build locally |
+| `npm run lint` | Run ESLint across the project |
 
-Email: toufiques236@gmail.com
-LinkedIn:www.linkedin.com/in/md-toufique-sheikh-a01063295
+## Project Structure
 
-Thanks for stopping by—hope you enjoy the ride as much as I enjoyed building it!
+```text
+src/
+├── components/     # Portfolio sections and 3D experiences
+├── data/           # Shared portfolio content
+├── utils/          # Theme and motion helpers
+├── App.jsx         # Main page composition
+└── main.jsx        # Application entry point
+public/             # Models, textures, and other static assets
+```
+
+## GitHub Data
+
+The projects and profile statistics sections request public data from the GitHub API for [`TOUFIQUE2004`](https://github.com/TOUFIQUE2004). API availability, rate limits, and network access can affect the information shown in those sections.
+
+## Contributing
+
+Suggestions and improvements are welcome. To contribute:
+
+1. Open an issue describing the change or problem.
+2. Create a focused branch for your work.
+3. Submit a pull request with a clear description and validation steps.
+
+## Assets and Licensing
+
+This repository includes third-party 3D assets and textures. Refer to the license files inside `public/` and its asset directories before reusing them outside this project.
+
+## Contact
+
+- Email: [toufiques236@gmail.com](mailto:toufiques236@gmail.com)
+- LinkedIn: [Md Toufique Sheikh](https://www.linkedin.com/in/md-toufique-sheikh-a01063295/)
+- GitHub: [TOUFIQUE2004](https://github.com/TOUFIQUE2004)
+
+Thanks for visiting and exploring the portfolio.
