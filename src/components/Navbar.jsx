@@ -25,21 +25,29 @@ const NavbarContainer = styled.nav`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: fixed;
+    position: sticky;
     top: 0;
     left: 0;
     width: 100%;
     max-width: 100vw;
-    z-index: 1000;
+    z-index: 10;
     animation: ${glow} 3s infinite alternate;
     border-bottom: 2px solid rgba(255, 255, 255, 0.2);
     box-sizing: border-box;
+
+    @media (max-width: 640px) {
+        padding: 0.85rem 1rem;
+    }
 `;
 
 // ✅ **Nav Items Wrapper**
 const NavItems = styled.div`
     display: flex;
     gap: 30px;
+
+    @media (max-width: 640px) {
+        gap: 0.25rem;
+    }
 `;
 
 // ✅ **Styled Links with Hover Effect**
@@ -52,6 +60,11 @@ const NavLink = styled(Link)`
     position: relative;
     transition: all 0.3s ease-in-out;
     cursor: pointer;
+
+    @media (max-width: 640px) {
+        padding: 0.45rem;
+        font-size: 0.85rem;
+    }
 
     &:hover {
         animation: ${jelly} 0.4s ease-in-out;
@@ -87,6 +100,10 @@ const NavLogo = styled.a`
     transition: transform 0.3s ease-in-out;
     cursor: pointer;
 
+    @media (max-width: 640px) {
+        font-size: 1.1rem;
+    }
+
     &:hover {
         transform: scale(1.1);
         color: #ffcc00;
@@ -100,6 +117,7 @@ const Navbar = () => {
             <NavLogo href="#">MY PORTFOLIO</NavLogo>
             <NavItems>
                 <NavLink to="AboutContainer" smooth={true} duration={800} offset={-80}>About</NavLink>
+                <NavLink to="Stats" smooth={true} duration={800} offset={-80}>Stats</NavLink>
                 <NavLink to="Skills" smooth={true} duration={800} offset={-80}>Skills</NavLink>
                 <NavLink to="Projects" smooth={true} duration={800} offset={-80}>Projects</NavLink>
                 <NavLink to="Contact" smooth={true} duration={800} offset={-80}>Contact</NavLink>

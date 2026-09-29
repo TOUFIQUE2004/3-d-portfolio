@@ -1,15 +1,8 @@
 import React, { useRef, Suspense } from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Stars } from "@react-three/drei";
 import * as THREE from "three";
-
-
-const glowEffect = keyframes`
-  0% { text-shadow: 0 0 10px rgba(255,255,150,0.3); }
-  50% { text-shadow: 0 0 30px rgba(255,255,150,0.7); }
-  100% { text-shadow: 0 0 10px rgba(255,255,150,0.3); }
-`;
 
 / 🌟 Full Page Background with Stars/
 const StarsBackground = styled.div`
@@ -25,21 +18,27 @@ const StarsBackground = styled.div`
 
 // 🌍 About Section Layout
 const AboutContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
   min-height: 100vh;
-  max-width: 100vw;
-  padding: 50px 80px;
+  padding: 7rem clamp(1.25rem, 6vw, 6rem);
   color: white;
   overflow: hidden;
   font-family: "Poppins", sans-serif;
+  background: radial-gradient(circle at 75% 35%, rgba(112, 77, 187, 0.2), transparent 34%);
+`;
+
+const Hero = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(2rem, 7vw, 7rem);
+  max-width: 1200px;
+  min-height: 70vh;
+  margin: 0 auto;
 
   @media (max-width: 1024px) {
     flex-direction: column;
     text-align: center;
-    padding: 30px 20px;
+    justify-content: center;
   }
 `;
 
@@ -58,9 +57,14 @@ const AboutText = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 3rem;
+  margin: 0 0 1.2rem;
+  font-size: clamp(2.5rem, 5vw, 4.8rem);
   font-weight: bold;
-  margin-bottom: 20px;
+  line-height: 1;
+
+  span {
+    color: #b998ff;
+  }
 
   @media (max-width: 768px) {
     font-size: 2rem;
@@ -68,10 +72,11 @@ const Title = styled.h1`
 `;
 
 const Paragraph = styled.p`
-  font-size: 1.2rem;
-  line-height: 1.6;
-  color: #ddd;
-  animation: ${glowEffect} 3s infinite alternate;
+  max-width: 650px;
+  margin: 0 0 1rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 1.05rem;
+  line-height: 1.75;
 
   @media (max-width: 768px) {
     font-size: 1rem;
@@ -84,14 +89,95 @@ const GlobeContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 600px;
-  height: 600px;
+  width: min(600px, 100%);
+  min-width: 0;
+  height: min(600px, 48vw);
 
   @media (max-width: 1024px) {
     width: 100%;
-    min-width: unset;
-    height: auto;
+    height: 420px;
   }
+
+  @media (max-width: 600px) {
+    height: 320px;
+  }
+`;
+
+const Eyebrow = styled.div`
+  margin-bottom: 1rem;
+  color: #ffcc66;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+`;
+
+const ResumeGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 1.25rem;
+  max-width: 1200px;
+  margin: 3rem auto 0;
+
+  @media (max-width: 780px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const ResumeCard = styled.article`
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 18px;
+  background: rgba(10, 11, 28, 0.68);
+  backdrop-filter: blur(12px);
+`;
+
+const CardLabel = styled.div`
+  margin-bottom: 1.25rem;
+  color: #b998ff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+`;
+
+const CardTitle = styled.h2`
+  margin: 0;
+  font-size: 1.35rem;
+`;
+
+const CardMeta = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0.45rem 0 1rem;
+  color: #ffcc66;
+  font-size: 0.85rem;
+
+  @media (max-width: 520px) {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+`;
+
+const CardText = styled.p`
+  margin: 0;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.92rem;
+  line-height: 1.65;
+`;
+
+const List = styled.ul`
+  display: grid;
+  gap: 1.1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+`;
+
+const ListItem = styled.li`
+  padding-left: 1rem;
+  border-left: 2px solid #b998ff;
 `;
 
 // 🎨 3D Earth Component
@@ -167,20 +253,17 @@ const About = () => {
                 </Canvas>
             </StarsBackground>
 
-            <AboutContainer>
+            <AboutContainer id="AboutContainer">
+              <Hero>
                 {/* 📜 Left Side - About Text */}
                 <AboutText>
-                    <Title>About Me</Title>
+                <Eyebrow>Software engineer in orbit</Eyebrow>
+                <Title>Hi, I&apos;m <span>Toufique.</span></Title>
                     <Paragraph>
-                        I am Md Toufique Sheikh, currently a third-year Information Technology student
-                        at the Government College of Engineering and Textile Technology, Serampore (GCETTS).
-                        I have completed courses in both basic and advanced Python and am currently interning at Kryptora.
+                  I&apos;m an aspiring Software Development Engineer and Information Technology student at the Government College of Engineering and Textile Technology, Serampore.
                     </Paragraph>
                     <Paragraph>
-                        Recently, I delved into Three.js during my semester break, exploring its capabilities
-                        in 3D graphics and WebGL. I also developed a creative project bringing the iconic
-                        Sharingan to life as my desktop wallpaper. Additionally, I embarked on a project to
-                        develop a YouTube downloader using Python and Django.
+                  I enjoy turning ambiguous problems into reliable products, with a focus on data structures, object-oriented design, distributed systems, and thoughtful user experiences. I build with Java, Python, JavaScript, React, Django, and relational databases.
                     </Paragraph>
                 </AboutText>
 
@@ -196,6 +279,39 @@ const About = () => {
                         <OrbitControls enableZoom={true} />
                     </Canvas>
                 </GlobeContainer>
+              </Hero>
+
+              <ResumeGrid>
+                <ResumeCard>
+                  <CardLabel>Experience</CardLabel>
+                  <CardTitle>Software Engineering Intern</CardTitle>
+                  <CardMeta><span>Kryptora Infotech</span><span>Dec 2023 - May 2024</span></CardMeta>
+                  <CardText>
+                    Built Django and Python systems for car assistance and local store management. Refactored legacy modules with object-oriented design, improving system reliability by 30%, and implemented database-backed inventory workflows to automate stock tracking.
+                  </CardText>
+                </ResumeCard>
+
+                <ResumeCard>
+                  <CardLabel>Education</CardLabel>
+                  <CardTitle>B.Tech in Information Technology</CardTitle>
+                  <CardMeta><span>GCETTS, Serampore</span><span>2023 - 2027</span></CardMeta>
+                  <CardText>Coursework includes distributed systems, object-oriented design, data structures and algorithms, complexity analysis, and relational databases.</CardText>
+                </ResumeCard>
+
+                <ResumeCard>
+                  <CardLabel>Certifications</CardLabel>
+                  <List>
+                    <ListItem><CardTitle>Python Core Developer</CardTitle><CardText>Kryptora Infotech Pvt. Ltd. · 2021</CardText></ListItem>
+                    <ListItem><CardTitle>Python Advanced Developer</CardTitle><CardText>Kryptora Infotech Pvt. Ltd. · 2021</CardText></ListItem>
+                  </List>
+                </ResumeCard>
+
+                <ResumeCard>
+                  <CardLabel>Currently exploring</CardLabel>
+                  <CardTitle>Federated learning &amp; AI</CardTitle>
+                  <CardText>Working on research into heart disease detection using federated learning and AI models. Also placed third in an internal Smart India Hackathon.</CardText>
+                </ResumeCard>
+              </ResumeGrid>
             </AboutContainer>
         </>
     );

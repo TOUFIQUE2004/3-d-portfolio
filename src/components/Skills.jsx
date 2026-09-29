@@ -1,143 +1,202 @@
-import * as THREE from "three";
-import React, { useRef, useMemo } from "react";
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { OrbitControls, Html } from "@react-three/drei";
+import React from "react";
+import styled from "styled-components";
+import { Canvas } from "@react-three/fiber";
 
-// ✅ Skills Data (with images)
 const skills = [
-    { name: "Python", url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
-    { name: "JavaScript", url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
-    { name: "React.js", url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
-    { name: "Java", url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" },
-    { name: "HTML5", url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" },
-    { name: "Django", url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" },
-    { name: "MATLAB", url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/matlab/matlab-original.svg" },
-    { name: "Octave", url: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Gnu-octave-logo.svg/120px-Gnu-octave-logo.svg.png" },
-    { name: "C", url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" }, // 🔵 Added C Language
-    { name: "MySQL", url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" } // 🐬 Added MySQL
+    "Java", "Python", "JavaScript", "C/C++", "React", "Next.js", "Django", "Express.js",
+    "MySQL", "PostgreSQL", "Git", "BeautifulSoup",
 ];
 
-// ✅ Star Background Component
-const Stars = () => {
-    const ref = useRef();
-    const starPositions = useMemo(() => {
-        const positions = [];
-        for (let i = 0; i < 500; i++) {
-            positions.push(
-                (Math.random() - 0.5) * 20,
-                (Math.random() - 0.5) * 20,
-                (Math.random() - 0.5) * 20
-            );
-        }
-        return new Float32Array(positions);
-    }, []);
+const SkillsSection = styled.section`
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(250px, 0.75fr) minmax(420px, 1.25fr);
+    align-items: center;
+    gap: clamp(1rem, 5vw, 5rem);
+    min-height: 115vh;
+    padding: 9rem clamp(1.25rem, 6vw, 6rem) 11rem;
+    box-sizing: border-box;
+    overflow: hidden;
+    color: white;
+    background: radial-gradient(circle at 70% 50%, rgba(109, 79, 194, 0.22), transparent 34%), #080914;
 
-    useFrame(() => {
-        ref.current.rotation.y += 0.0005; // Slow twinkling rotation effect
-    });
+    @media (max-width: 840px) {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding-block: 6rem;
+    }
+`;
+
+const Copy = styled.div`
+    position: relative;
+    z-index: 2;
+    max-width: 430px;
+
+    @media (max-width: 840px) {
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+    }
+`;
+
+const Eyebrow = styled.div`
+    margin-bottom: 1rem;
+    color: #ffcc66;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+`;
+
+const Title = styled.h2`
+    margin: 0 0 1rem;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2.5rem, 5vw, 4.8rem);
+    line-height: 0.98;
+`;
+
+const Description = styled.p`
+    margin: 0 0 1.8rem;
+    color: rgba(255, 255, 255, 0.68);
+    line-height: 1.7;
+`;
+
+const SkillList = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+
+    @media (max-width: 840px) {
+        justify-content: center;
+    }
+`;
+
+const SkillTag = styled.span`
+    padding: 0.55rem 0.75rem;
+    border: 1px solid rgba(185, 152, 255, 0.3);
+    border-radius: 999px;
+    background: rgba(185, 152, 255, 0.08);
+    color: rgba(255, 255, 255, 0.84);
+    font-size: 0.8rem;
+`;
+
+const Stage = styled.div`
+    position: relative;
+    width: min(700px, 100%);
+    aspect-ratio: 1;
+    min-height: 0;
+    margin: 0 auto;
+
+    @media (max-width: 520px) {
+        width: min(420px, 100%);
+    }
+`;
+
+const Sphere = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: clamp(220px, 32vw, 340px);
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 25%, #d4c2ff 0%, #7c54cf 25%, #25164f 70%, #0e0a22 100%);
+    box-shadow: 0 0 45px rgba(143, 100, 255, 0.5), inset -24px -18px 35px rgba(0, 0, 0, 0.5);
+
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 12%;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 50%;
+        transform: rotate(-25deg) scaleY(0.3);
+    }
+`;
+
+const Ring = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 82%;
+    height: 35%;
+    border: 1px solid rgba(255, 204, 102, 0.35);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) rotate(-18deg);
+    box-shadow: 0 0 24px rgba(255, 204, 102, 0.1);
+`;
+
+const Orbit = styled.div`
+    position: absolute;
+    inset: 10%;
+    border: 1px solid rgba(185, 152, 255, 0.28);
+    border-radius: 50%;
+`;
+
+const Badge = styled.span`
+    position: absolute;
+    left: 50%;
+    top: -0.75rem;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    background: rgba(18, 15, 38, 0.88);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+    color: white;
+    font-size: 0.72rem;
+    white-space: nowrap;
+    transform: translate(-50%, -50%);
+`;
+
+const Stars = () => {
+    const positions = new Float32Array(Array.from({ length: 600 }, () => (Math.random() - 0.5) * 20));
 
     return (
-        <points ref={ref}>
+        <points>
             <bufferGeometry>
-                <bufferAttribute attach="attributes-position" count={starPositions.length / 3} array={starPositions} itemSize={3} />
+                <bufferAttribute attach="attributes-position" count={positions.length / 3} array={positions} itemSize={3} />
             </bufferGeometry>
             <pointsMaterial size={0.05} color="white" />
         </points>
     );
 };
 
-// ✅ Rotating Sphere
-const RotatingGlobe = () => {
-    const ref = useRef();
-
-    useFrame(() => {
-        ref.current.rotation.y += 0.002; // Smooth rotation
-    });
-
-    return (
-        <mesh ref={ref}>
-            <sphereGeometry args={[2.5, 64, 64]} />
-            <meshStandardMaterial color="purple" emissive="purple" emissiveIntensity={0.5} transparent opacity={0.8} />
-        </mesh>
-    );
-};
-
-// ✅ Skill Icons Orbiting the Sphere
-const SkillIcon = ({ skill, radius, angleOffset }) => {
-    const ref = useRef();
-    const texture = useLoader(THREE.TextureLoader, skill.url);
-
-    useFrame(({ clock }) => {
-        const t = clock.getElapsedTime();
-        ref.current.position.x = Math.cos(t + angleOffset) * radius;
-        ref.current.position.z = Math.sin(t + angleOffset) * radius;
-        ref.current.position.y = Math.sin(t * 0.5) * 1; // Bobbing effect
-    });
-
-    return (
-        <group ref={ref}>
-            <mesh>
-                <planeGeometry args={[1, 1]} />
-                <meshBasicMaterial map={texture} transparent />
-            </mesh>
-            {/* Skill Name Below Icon */}
-            <Html position={[0, -0.8, 0]} center>
-                <span style={{ color: "white", fontSize: "12px", fontWeight: "bold", textAlign: "center" }}>
-                    {skill.name}
-                </span>
-            </Html>
-        </group>
-    );
-};
-
-// ✅ 3D Scene with Dark Theme & Stars
-const SkillsScene = () => {
-    return (
-        <Canvas
-            camera={{ position: [0, 0, 8] }}
-            style={{ position: "absolute", top: 0, left: 0, width: "100vw", height: "100vh", pointerEvents: "none" }}
-        >
-            <Stars /> {/* ✨ Add the stars in the background */}
-            <ambientLight intensity={1.5} />
-            <pointLight position={[5, 5, 5]} intensity={2} />
-            <RotatingGlobe />
-            {skills.map((skill, i) => (
-                <SkillIcon key={i} skill={skill} radius={4.5} angleOffset={i * (Math.PI / 4)} />
-            ))}
-            <OrbitControls enableZoom={false} />
-        </Canvas>
-    );
-};
-
-// ✅ Main Component with Dark Theme
 const Skills = () => {
     return (
-        <div id="Skills" style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            height: "100vh",
-            background: "#0a0a0a", // Dark theme
-            color: "white",
-            padding: "2rem",
-            position: "relative",
-        }}>
-            {/* Left Side: Skill List */}
-            <div style={{ flex: 1, paddingLeft: "5rem", maxWidth: "40%" }}>
-                <h2 style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>Top Skills</h2>
-                <ul style={{ listStyle: "none", padding: 0 }}>
-                    {skills.map((skill, i) => (
-                        <li key={i} style={{ marginBottom: "1rem", fontSize: "1.2rem" }}>
-                            <strong>{skill.name}</strong>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+    <SkillsSection id="Skills">
+        <Canvas
+            camera={{ position: [0, 0, 8] }}
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}
+        >
+            <Stars />
+        </Canvas>
 
-            {/* Right Side: 3D Sphere with Rotating Icons */}
-            <SkillsScene />
-        </div>
+        <Copy>
+            <Eyebrow>Toolkit / 2026</Eyebrow>
+            <Title>Top skills</Title>
+            <Description>
+                A practical toolkit for building reliable products, from data collection and backend systems to polished interfaces.
+            </Description>
+            <SkillList>{skills.map((skill) => <SkillTag key={skill}>{skill}</SkillTag>)}</SkillList>
+        </Copy>
+
+        <Stage aria-label="Skills orbiting around a sphere">
+            <Ring />
+            <Sphere />
+            <Orbit>{skills.map((skill, index) => {
+                const angle = (index / skills.length) * Math.PI * 2 - Math.PI / 2;
+                const radius = 45;
+                const left = 50 + Math.cos(angle) * radius;
+                const top = 50 + Math.sin(angle) * radius;
+
+                return (
+                <Badge key={skill} style={{ left: `${left}%`, top: `${top}%` }}>
+                    {skill}
+                </Badge>
+                );
+            })}</Orbit>
+        </Stage>
+    </SkillsSection>
     );
 };
 
